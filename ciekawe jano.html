@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>JANOSIX & Mokosh — Bramy Wszechświata</title>
+<meta name="description" content="JANOSIX & Mokosh — portal: UFO, duchowość, kwanty, porady Mokosh. Pełen materiałów, map, galerii i interaktywnych eksperymentów."/>
+<link rel="icon" href="data:," />
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<style>
+/* ================= GLOBAL STYLES ================= */
+:root{
+  --bg-1:#020016;
+  --bg-2:#000004;
+  --card: rgba(8,12,20,0.72);
+  --glass: rgba(255,255,255,0.03);
+  --accent:#6ee7ff;
+  --accent-2:#b892ff;
+  --muted:#9fbfd6;
+  --radius:14px;
+  --maxw:1200px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#e7fbff;background:linear-gradient(180deg,var(--bg-1) 0%, var(--bg-2) 100%);}
+a{color:var(--accent);text-decoration:none}
+.wrap{max-width:var(--maxw);margin:18px auto;padding:18px;}
+/* header */
+.header{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px;border-radius:12px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02)}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-family:Orbitron;color:#001;font-weight:800}
+.title h1{margin:0;font-size:1.35rem;color:var(--accent);letter-spacing:1px}
+.title p{margin:0;color:var(--muted);font-size:0.95rem}
+
+/* nav */
+nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;padding:10px;margin:14px 0;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.006));border:1px solid rgba(255,255,255,0.01)}
+nav a{padding:8px 12px;border-radius:8px;font-weight:600;color:var(--accent)}
+nav a:hover{background:rgba(110,231,255,0.06);color:var(--accent-2)}
+
+/* layout sections */
+.section{background:var(--card);padding:18px;margin-bottom:18px;border-radius:var(--radius);box-shadow:0 14px 60px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.02)}
+.section h2{color:var(--accent);margin-top:0}
+.lead{color:var(--muted)}
+
+/* columns */
+.two-col{display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:start}
+@media(max-width:980px){.two-col{grid-template-columns:1fr}}
+
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.gallery img{width:100%;height:110px;object-fit:cover;border-radius:10px;cursor:pointer;border:1px solid rgba(255,255,255,0.04);transition:transform .12s,box-shadow .12s}
+.gallery img:hover{transform:scale(1.04);box-shadow:0 14px 40px rgba(0,0,0,0.6)}
+
+/* buttons/inputs */
+button{background:var(--accent);color:#001;border:none;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700;box-shadow:0 10px 26px rgba(0,0,0,0.3)}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+.input,textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:#eaf9ff}
+textarea{min-height:110px}
+
+/* canvas blocks */
+.map-box{height:420px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.02)}
+canvas{display:block;width:100%;height:100%}
+
+/* modal */
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.98);min-width:320px;max-width:960px;background:linear-gradient(180deg, rgba(6,8,10,0.98), rgba(2,4,6,0.99));padding:16px;border-radius:12px;z-index:9999;display:none;border:1px solid rgba(110,231,255,0.04);box-shadow:0 40px 120px rgba(0,0,0,0.8)}
+.modal.show{display:block;animation:pop .14s ease forwards}
+@keyframes pop{to{transform:translate(-50%,-50%) scale(1)}}
+.modal img{width:100%;border-radius:10px;margin-bottom:10px}
+.meta{color:var(--muted);font-size:0.95rem}
+
+/* footer */
+footer{margin-top:18px;padding:18px;text-align:center;color:var(--muted);font-size:0.9rem;border-top:1px solid rgba(255,255,255,0.02)}
+
+/* misc */
+.flex{display:flex;gap:10px;align-items:center}
+.right{margin-left:auto}
+.note{font-size:0.95rem;color:var(--muted)}
+.pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);font-weight:600}
+.small{padding:6px 8px;font-size:0.9rem}
+</style>
+</head>
+<body>
+  <!-- ================= WRAPPER ================= -->
+  <div class="wrap" role="main">
+
+    <!-- HEADER -->
+    <header class="header" role="banner" aria-label="Naglowek">
+      <div class="brand">
+        <div class="logo" aria-hidden>JX</div>
+        <div class="title">
+          <h1>JANOSIX &amp; Mokosh</h1>
+          <p class="note">Bramy Wszechświata — UFO, duchowość, energia kwantowa, porady</p>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="flex" role="group" aria-label="Sterowanie">
+          <div class="pill">Właściciele: JANOSIX &amp; Mokosh</div>
+          <button id="musicToggle" class="small btn-ghost" aria-pressed="false">Włącz muzykę</button>
+          <button id="matrixToggle" class="small btn-ghost" aria-pressed="false">Włącz Matrix</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- NAV -->
+    <nav role="navigation" aria-label="Główne menu">
+      <a href="#" data-page="home">Home</a>
+      <a href="#" data-page="gallery">Galeria</a>
+      <a href="#" data-page="map">Mapa &amp; Zgłoszenia</a>
+      <a href="#" data-page="quantum">Symulator Kwantowy</a>
+      <a href="#" data-page="mokosh">Porady Mokosh</a>
+      <a href="#" data-page="paranormal">Relacje</a>
+      <a href="#" data-page="archives">Tajne archiwa</a>
+      <a href="#" data-page="about">O projekcie</a>
+    </nav>
+
+    <!-- ================= PAGES ================= -->
+    <main id="pages">
+
+      <!-- HOME -->
+      <section id="home" class="section" aria-labelledby="home-title">
+        <h2 id="home-title">Wprowadzenie — Bramy Wszechświata</h2>
+        <p class="lead">Witaj w rozbudowanym portalu łączącym raporty, galerie, mapy i eksperymenty wizualne. Wszystkie dane zapisują się lokalnie (localStorage). Możesz eksportować swoje zgłoszenia i historie w formacie JSON.</p>
+
+        <div class="two-col" style="margin-top:12px">
+          <div>
+            <h3>Główne obszary</h3>
+            <ul>
+              <li><strong>UFO / UAP</strong> — raports, analizy, relacje świadków.</li>
+              <li><strong>Fizyka Kwantowa</strong> — symulacje, telekomunikacja, splątanie.</li>
+              <li><strong>Duchowość</strong> — porady Mokosh, rytuały, uziemienie.</li>
+              <li><strong>Archiwa</strong> — tajne projekty, nieznane dokumenty.</li>
+            </ul>
+            <p class="note">Wszystko tutaj ma charakter edukacyjny / spekulatywny. Szanuj prywatność innych.</p>
+          </div>
+
+          <aside>
+            <div style="background:var(--glass);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)">
+              <h4 style="margin:0 0 8px;color:var(--accent)">Szybkie akcje</h4>
+              <div class="flex" style="flex-direction:column;gap:8px">
+                <button class="btn" onclick="showPage('gallery')">Otwórz Galerię</button>
+                <button class="btn btn-ghost" onclick="showPage('map')">Otwórz Mapę</button>
+                <button class="btn btn-ghost" onclick="showPage('mokosh')">Porady Mokosh</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- GALLERY -->
+      <section id="gallery" class="section" style="display:none" aria-labelledby="gallery-title">
+        <h2 id="gallery-title">Galeria — obrazy, dowody i ilustracje</h2>
+        <p class="lead">Kliknij zdjęcie, aby powiększyć i przeczytać opis. Źródła starane tak, by były ogólnodostępne (Pixabay / Wikimedia).</p>
+        <div class="gallery" id="galleryGrid" aria-live="polite"></div>
+        <div style="margin-top:12px" class="flex">
+          <button id="restoreGallery" class="btn">Przywróć galerię</button>
+          <button id="addImage" class="btn btn-ghost">Dodaj własne zdjęcie</button>
+        </div>
+      </section>
+
+      <!-- MAP -->
+      <section id="map" class="section" style="display:none" aria-labelledby="map-title">
+        <h2 id="map-title">Interaktywna mapa kosmosu &amp; zgłoszeń</h2>
+        <p class="lead">Dodawaj zgłoszenia bezpośrednio na mapie lub przez formularz. Wszystko zapisuje się lokalnie — eksportuj JSON by udostępnić innym.</p>
+
+        <div class="two-col" style="margin-top:12px">
+          <div>
+            <div id="mapBox" class="map-box" role="application" aria-label="Interaktywna mapa">
+              <canvas id="mapCanvas"></canvas>
+            </div>
+            <div class="legend" style="margin-top:8px">
+              <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#9fe7ff;margin-right:6px"></span><span class="note">Gwiazda</span>
+              <span style="width:18px;display:inline-block"></span>
+              <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#ff7f7f;margin-right:6px"></span><span class="note">Zgłoszenie</span>
+            </div>
+            <p class="note" style="margin-top:8px">Kliknij gwiazdę lub zgłoszenie, aby zobaczyć szczegóły. Kliknięcie pustej przestrzeni pozwala dodać testowe zgłoszenie.</p>
+          </div>
+
+          <aside>
+            <div style="position:sticky;top:20px">
+              <form id="reportForm" class="section" style="padding:12px">
+                <label for="r_name">Nazwa / pseudonim</label>
+                <input id="r_name" class="input" type="text" placeholder="Twoje imię (opcjonalnie)"/>
+                <label for="r_desc">Opis zdarzenia</label>
+                <textarea id="r_desc" placeholder="Co widziałeś?" ></textarea>
+                <label for="r_loc">Lokalizacja / współrzędne</label>
+                <input id="r_loc" class="input" type="text" placeholder="np. 'Las, 1999' lub '120,240'"/>
+                <label for="r_time">Data / rok</label>
+                <input id="r_time" class="input" type="text" placeholder="np. 1994 lub 2025-10-06"/>
+                <label for="r_media">Link do dowodu (opcjonalne)</label>
+                <input id="r_media" class="input" type="text" placeholder="https://..." />
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <button id="submitReport" class="btn" type="submit">Zgłoś</button>
+                  <button id="clearReportsBtn" class="btn btn-ghost" type="button">Wyczyść</button>
+                </div>
+                <p id="reportMsg" class="note"></p>
+              </form>
+
+              <div style="margin-top:12px;padding:12px;background:var(--glass);border-radius:10px;border:1px solid rgba(255,255,255,0.02)">
+                <h4 style="margin:0 0 8px;color:var(--accent)">Eksport / Import</h4>
+                <div style="display:flex;gap:8px">
+                  <button id="exportBtn" class="btn">Eksportuj JSON</button>
+                  <button id="importBtn" class="btn btn-ghost">Importuj JSON</button>
+                </div>
+                <p class="note" style="margin-top:8px">Eksport to plik, który możesz wysłać znajomym.</p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- QUANTUM -->
+      <section id="quantum" class="section" style="display:none" aria-labelledby="quantum-title">
+        <h2 id="quantum-title">Symulator energii kwantowej</h2>
+        <p class="lead">Porusz myszką lub dotknij ekranu — obserwuj jak "cząstki" reagują. To wizualny efekt inspirowany chmurą prawdopodobieństwa.</p>
+        <div style="height:360px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.02)">
+          <canvas id="quantumCanvas" style="width:100%;height:360px;display:block;"></canvas>
+        </div>
+        <p class="note" style="margin-top:10px">Element estetyczny — nie jest eksperymentem naukowym.</p>
+      </section>
+
+      <!-- MOKOSH -->
+      <section id="mokosh" class="section" style="display:none" aria-labelledby="mokosh-title">
+        <h2 id="mokosh-title">Porady Pani Mokosh</h2>
+        <p class="lead">Pani Mokosh dzieli się praktykami uziemienia, ochrony energetycznej i interpretacji snów. Możesz też dodać własne porady.</p>
+
+        <div class="two-col" style="margin-top:12px">
+          <div>
+            <label>Twoje imię / pseudonim</label>
+            <input id="p_name" class="input" type="text" placeholder="np. Ania / Stary Mędrzec" />
+            <label>Porada / technika</label>
+            <textarea id="p_text" placeholder="Opisz technikę, rytuał lub radę..."></textarea>
+            <div class="flex" style="margin-top:10px">
+              <button id="submitAdvice" class="btn">Dodaj poradę</button>
+              <button id="clearAdvice" class="btn btn-ghost">Wyczyść</button>
+            </div>
+          </div>
+
+          <div>
+            <h4>Porady społeczności</h4>
+            <div id="adviceList" style="max-height:320px;overflow:auto;padding:8px;background:var(--glass);border-radius:10px"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PARANORMAL -->
+      <section id="paranormal" class="section" style="display:none" aria-labelledby="para-title">
+        <h2 id="para-title">Relacje paranormalne — historie ludzi</h2>
+        <p class="lead">Opowiedz swoją historię: zjawy, sny prorocze, synchroniczność. Relacje przechowywane lokalnie.</p>
+
+        <div class="two-col" style="margin-top:12px">
+          <div>
+            <label>Tytuł</label>
+            <input id="s_title" class="input" type="text" placeholder="np. 'Światło w lesie'"/>
+            <label>Relacja</label>
+            <textarea id="s_body" placeholder="Opowiedz swoją historię..."></textarea>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button id="submitStory" class="btn">Dodaj relację</button>
+              <button id="clearStories" class="btn btn-ghost">Wyczyść relacje</button>
+            </div>
+            <p class="note">Relacje zapisują się lokalnie.</p>
+          </div>
+          <div>
+            <div id="storiesList" style="max-height:360px;overflow:auto;padding:8px;background:var(--glass);border-radius:10px"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ARCHIVES -->
+      <section id="archives" class="section" style="display:none" aria-labelledby="arch-title">
+        <h2 id="arch-title">Tajne archiwa — projekty i hipotezy</h2>
+        <p class="lead">Zebrane teorie i opisy projektów, które pojawiały się w raportach, dezinformacji i ujawnieniach. To zbiór hipotez — część to spekulacje, część to publiczne materiały z dokumentów odtajnionych.</p>
+
+        <h3>Projekt „Aurora” — hipoteza</h3>
+        <p>Opis: rzekome testy zaawansowanych napędów hipersonicznych. Niepotwierdzone informacje sugerują związek z technologiami manipulacji inercji.</p>
+
+        <h3>Program „Majestic / MJ-12” — legenda</h3>
+        <p>Opis: dokumenty i memy sugerujące istnienie grupy, która miała zarządzać kontaktem z obcymi. W większości to teoria spiskowa, ale w kulturze popularnej ma duże znaczenie.</p>
+
+        <h3>Analiza materiałów „nieznanego pochodzenia”</h3>
+        <p>Opis: w różnych raportach pojawiają się wzmianki o nieznanych stopach i próbkach — część laboratoriów publikuje analizy, ale większość danych jest niepewna.</p>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="section" style="display:none" aria-labelledby="about-title">
+        <h2 id="about-title">O projekcie</h2>
+        <p class="lead">JANOSIX odpowiada za część techniczną i badawczą; Mokosh dzieli się praktykami duchowymi. Niniejszy portal jest miejscem do dzielenia się hipotezami, relacjami i eksperymentami wizualnymi. Strona działa lokalnie, nie wysyła danych bez Twojej zgody.</p>
+
+        <h3>Kontakt i własność</h3>
+        <p class="note">Strona należy do <strong>JANOSIX</strong> i <strong>Mokosh</strong>. Jeśli chcesz współpracować — możesz prosić o instrukcje kontaktu i sposób podzielenia się pracą. Nie publikujemy adresów e-mail bez zgody.</p>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="note">© 2025 JANOSIX &amp; Mokosh — Bramy Wszechświata • Wszystkie treści mają charakter edukacyjno-hipotetyczny.</div>
+    </footer>
+  </div>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal" role="dialog" aria-hidden="true">
+    <div id="modalBody"></div>
+    <div style="text-align:right;margin-top:12px"><button id="closeModal" class="btn btn-ghost">Zamknij</button></div>
+  </div>
+
+  <!-- AUDIO (ambient + synth) -->
+  <audio id="bgAudio" loop crossorigin style="display:none">
+    <!-- Pixabay ambient track (public) -->
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_17b3f96e8d.mp3?filename=space-ambient-110059.mp3" type="audio/mp3">
+    <!-- alternate -->
+    <source src="https://cdn.pixabay.com/download/audio/2023/01/03/audio_7ff17c7a47.mp3?filename=ethereal-space-132302.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Matrix canvas (initially hidden) -->
+  <canvas id="matrixCanvas" style="position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:-2;opacity:0.12;display:none"></canvas>
+
+  <!-- Small helpful styles for dynamic elements (injected by JS if needed) -->
+  <script>
+  /* ============================
+     COMPLETE CLIENT-SIDE JAVASCRIPT
+     Includes:
+       - page routing
+       - gallery + modal
+       - map canvas + reports (localStorage, export/import)
+       - quantum canvas visualizer
+       - stories and advice management (localStorage)
+       - music and matrix toggles
+       - responsive helpers
+     ============================ */
+
+  // ---------- ROUTING / PAGE SHOW ----------
+  function showPage(id){
+    document.querySelectorAll('#pages section').forEach(s => s.style.display = (s.id === id ? 'block' : 'none'));
+    // accessibility focus
+    const sec = document.getElementById(id);
+    if(sec){ sec.tabIndex = -1; sec.focus(); }
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  document.querySelectorAll('nav a').forEach(a=>{
+    a.addEventListener('click', (ev)=>{
+      ev.preventDefault();
+      const id = a.getAttribute('data-page');
+      showPage(id);
+    });
+  });
+  showPage('home');
+
+  // ---------- GALLERY ----------
+  const galleryData = [
+    {src:"https://upload.wikimedia.org/wikipedia/commons/3/3c/Ghostly_figure_in_a_dark_room.jpg", title:"Zjawa w ciemnym pokoju", desc:"Ilustracja relacji o zjwach (Wikimedia Commons)."},
+    {src:"https://upload.wikimedia.org/wikipedia/commons/4/4d/Cursed_doll_in_glass_case.jpg", title:"Przeklęta lalka", desc:"Przykład obiektu przypisywanego paranormalnym historiom."},
+    {src:"https://cdn.pixabay.com/photo/2020/08/24/11/00/ufo-5514860_1280.jpg", title:"Ilustracja UFO", desc:"Artystyczna wizualizacja UAP."},
+    {src:"https://cdn.pixabay.com/photo/2019/11/11/09/25/space-4617952_1280.jpg", title:"Mgławica i gwiazdy", desc:"Fotografia kosmiczna."},
+    {src:"https://cdn.pixabay.com/photo/2018/02/10/22/17/universe-3146971_1280.jpg", title:"Pole kwantowe", desc:"Ilustracja inspirująca do dyskusji o kwantach."}
+  ];
+  const galleryGrid = document.getElementById('galleryGrid');
+  function renderGallery(){
+    galleryGrid.innerHTML = '';
+    galleryData.forEach((it,idx)=>{
+      const img = document.createElement('img');
+      img.src = it.src; img.alt = it.title; img.loading = 'lazy';
+      img.addEventListener('click', ()=> openModal(`<img src="${it.src}" alt="${it.title}" /><div class="meta"><strong>${it.title}</strong><p>${it.desc||''}</p></div>`));
+      galleryGrid.appendChild(img);
+    });
+  }
+  renderGallery();
+  document.getElementById('restoreGallery').addEventListener('click', ()=> { renderGallery(); alert('Galeria przywrócona.'); });
+  document.getElementById('addImage').addEventListener('click', ()=>{
+    const url = prompt('Podaj URL obrazu (https://...)');
+    if(!url) return;
+    const title = prompt('Tytuł (opcjonalnie)') || 'Obraz użytkownika';
+    galleryData.unshift({src:url,title,desc:'Dodane ręcznie'});
+    renderGallery();
+  });
+
+  // ---------- MODAL ----------
+  const modal = document.getElementById('modal');
+  const modalBody = document.getElementById('modalBody');
+  document.getElementById('closeModal').addEventListener('click', ()=> { modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); });
+  function openModal(html){
+    modalBody.innerHTML = html;
+    modal.classList.add('show'); modal.setAttribute('aria-hidden','false');
+  }
+
+  // ---------- AUDIO CONTROL ----------
+  const bgAudio = document.getElementById('bgAudio');
+  const musicToggle = document.getElementById('musicToggle');
+  let audioStarted = false;
+  function startAudioIfAllowed(){
+    if(audioStarted) return;
+    bgAudio.volume = 0.12;
+    bgAudio.play().catch(()=>{ /* autoplay blocked until user interacts */});
+    audioStarted = true;
+    musicToggle.textContent = 'Wyłącz muzykę';
+    musicToggle.setAttribute('aria-pressed','true');
+  }
+  // start on user gesture
+  ['click','keydown','touchstart','mousemove'].forEach(ev => window.addEventListener(ev, startAudioIfAllowed, {once:true}));
+
+  musicToggle.addEventListener('click', ()=>{
+    if(bgAudio.paused){ bgAudio.play().catch(()=>{}); musicToggle.textContent='Wyłącz muzykę'; musicToggle.setAttribute('aria-pressed','true'); }
+    else { bgAudio.pause(); musicToggle.textContent='Włącz muzykę'; musicToggle.setAttribute('aria-pressed','false'); }
+  });
+
+  // ---------- MATRIX TOGGLE ----------
+  const matrixBtn = document.getElementById('matrixToggle');
+  const matrixCanvas = document.getElementById('matrixCanvas');
+  let matrixActive = false;
+  let mCtx, mCols;
+  matrixBtn.addEventListener('click', ()=>{
+    matrixActive = !matrixActive;
+    matrixCanvas.style.display = matrixActive ? 'block' : 'none';
+    matrixBtn.textContent = matrixActive ? 'Wyłącz Matrix' : 'Włącz Matrix';
+    matrixBtn.setAttribute('aria-pressed', matrixActive ? 'true' : 'false');
+    if(matrixActive) startMatrix(); else stopMatrix();
+  });
+
+  function startMatrix(){
+    matrixCanvas.width = window.innerWidth; matrixCanvas.height = window.innerHeight;
+    mCtx = matrixCanvas.getContext('2d');
+    const fontSize = 16; const cols = Math.floor(matrixCanvas.width / fontSize);
+    mCols = Array(cols).fill(0).map(()=>Math.random()*matrixCanvas.height);
+    matrixTick();
+  }
+  let matrixRAF = null;
+  function matrixTick(){
+    if(!matrixActive) return;
+    mCtx.fillStyle = 'rgba(0,0,0,0.06)'; mCtx.fillRect(0,0,matrixCanvas.width,matrixCanvas.height);
+    mCtx.fillStyle = '#00ff99'; mCtx.font = '16px monospace';
+    for(let i=0;i<mCols.length;i++){
+      const text = String.fromCharCode(0x30A0 + Math.random()*96);
+      mCtx.fillText(text, i*16, mCols[i]);
+      if(mCols[i] > matrixCanvas.height && Math.random() > 0.975) mCols[i] = 0;
+      mCols[i] += 18;
+    }
+    matrixRAF = requestAnimationFrame(matrixTick);
+  }
+  function stopMatrix(){
+    if(matrixRAF) cancelAnimationFrame(matrixRAF);
+    if(mCtx) mCtx.clearRect(0,0,matrixCanvas.width,matrixCanvas.height);
+  }
+  window.addEventListener('resize', ()=>{ if(matrixActive){ matrixCanvas.width = window.innerWidth; matrixCanvas.height = window.innerHeight; } });
+
+  // ---------- MAP (canvas) ----------
+  const mapCanvas = document.getElementById('mapCanvas');
+  const mapCtx = mapCanvas.getContext('2d');
+  let DPR = window.devicePixelRatio || 1;
+  function setMapSize(){
+    const box = document.getElementById('mapBox');
+    mapCanvas.width = box.clientWidth * DPR;
+    mapCanvas.height = box.clientHeight * DPR;
+    mapCanvas.style.width = box.clientWidth + 'px';
+    mapCanvas.style.height = box.clientHeight + 'px';
+    mapCtx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener('resize', ()=>{ DPR = window.devicePixelRatio || 1; setMapSize(); drawMap(); });
+
+  let stars = [], reports = [];
+  function genStars(){
+    stars = [];
+    const w = mapCanvas.clientWidth, h = mapCanvas.clientHeight;
+    const count = Math.floor((w*h)/32000) + 90;
+    for(let i=0;i<count;i++){
+      stars.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.6+0.4,bright:0.4+Math.random()*0.9,id:'S'+i});
+    }
+  }
+  function drawMap(){
+    const w = mapCanvas.clientWidth, h = mapCanvas.clientHeight;
+    // background gradient
+    const g = mapCtx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,'rgba(0,8,16,0.6)'); g.addColorStop(1,'rgba(0,0,6,0.9)');
+    mapCtx.fillStyle = g; mapCtx.fillRect(0,0,w,h);
+    // stars
+    for(const s of stars){
+      mapCtx.beginPath();
+      mapCtx.fillStyle = `rgba(180,220,255,${s.bright})`;
+      mapCtx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      mapCtx.fill();
+    }
+    // reports
+    for(const r of reports){
+      mapCtx.beginPath();
+      mapCtx.fillStyle = 'rgba(255,110,110,0.95)';
+      mapCtx.arc(r.x,r.y,6,0,Math.PI*2); mapCtx.fill();
+      mapCtx.beginPath();
+      mapCtx.strokeStyle = 'rgba(255,200,120,0.35)'; mapCtx.lineWidth = 1.6;
+      mapCtx.arc(r.x,r.y,12,0,Math.PI*2); mapCtx.stroke();
+    }
+  }
+  mapCanvas.addEventListener('click', function(e){
+    const rect = mapCanvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left);
+    const y = (e.clientY - rect.top);
+    // click on existing report?
+    for(const r of reports){
+      if(Math.hypot(r.x-x,r.y-y) < 10){ openModal(`<div class="meta"><strong>${r.name||'Anonim'}</strong> — ${r.time||'brak daty'}<p>${r.desc||''}</p><p>${r.loc||''}</p>${r.media?'<p><a href="'+r.media+'" target="_blank">Dowód / media</a></p>':''}</div>`); return; }
+    }
+    // add test report
+    if(confirm('Dodać testowe zgłoszenie w tym miejscu?')){
+      const newR = {id:'R'+Date.now(),x,y,name:'Test',desc:'Ręczne dodane z mapy',loc:'map',time:new Date().toISOString().split('T')[0],media:''};
+      reports.push(newR); saveReports(); drawMap();
+    }
+  });
+
+  // storage for reports
+  function saveReports(){ localStorage.setItem('janosix_reports', JSON.stringify(reports)); }
+  function loadReports(){ const raw = localStorage.getItem('janosix_reports'); reports = raw ? JSON.parse(raw) : []; }
+  document.getElementById('clearReportsBtn').addEventListener('click', ()=> { if(confirm('Wyczyścić lokalne zgłoszenia?')){ reports=[]; saveReports(); drawMap(); } });
+
+  document.getElementById('reportForm').addEventListener('submit', (ev)=>{
+    ev.preventDefault();
+    const r = {
+      id:'R'+Date.now(),
+      name: document.getElementById('r_name').value || 'Anonim',
+      desc: document.getElementById('r_desc').value || 'Brak opisu',
+      loc: document.getElementById('r_loc').value || '',
+      time: document.getElementById('r_time').value || new Date().toISOString().split('T')[0],
+      media: document.getElementById('r_media').value || '',
+      x: Math.random()*mapCanvas.clientWidth,
+      y: Math.random()*mapCanvas.clientHeight
+    };
+    const coords = (document.getElementById('r_loc').value||'').split(',').map(s=>parseFloat(s));
+    if(coords.length>=2 && !isNaN(coords[0]) && !isNaN(coords[1])){ r.x = Math.max(8,Math.min(mapCanvas.clientWidth-8,coords[0])); r.y = Math.max(8,Math.min(mapCanvas.clientHeight-8,coords[1])); }
+    reports.push(r); saveReports(); drawMap();
+    document.getElementById('reportMsg').textContent = 'Zgłoszenie zapisane lokalnie.';
+    setTimeout(()=> document.getElementById('reportMsg').textContent = '',3500);
+    document.getElementById('reportForm').reset();
+  });
+
+  document.getElementById('exportBtn').addEventListener('click', ()=>{
+    const data = JSON.stringify(reports, null, 2);
+    const blob = new Blob([data], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'janosix_reports.json'; a.click();
+    URL.revokeObjectURL(url);
+  });
+  document.getElementById('importBtn').addEventListener('click', ()=>{
+    const txt = prompt('Wklej JSON zgłoszeń do importu:');
+    try { const arr = JSON.parse(txt); if(Array.isArray(arr)){ reports = arr; saveReports(); drawMap(); alert('Import zakończony.'); } else alert('Nieprawidłowy format.'); }
+    catch(e){ alert('Błąd parsowania JSON.'); }
+  });
+
+  // ---------- STORIES (paranormal) ----------
+  let stories = [];
+  function loadStories(){ const raw = localStorage.getItem('janosix_stories'); stories = raw ? JSON.parse(raw) : []; renderStories(); }
+  function saveStories(){ localStorage.setItem('janosix_stories', JSON.stringify(stories)); }
+  document.getElementById('submitStory').addEventListener('click', ()=>{
+    const title = document.getElementById('s_title').value || 'Bez tytułu';
+    const body = document.getElementById('s_body').value || '';
+    stories.unshift({id:'S'+Date.now(),title,body,time:new Date().toISOString()});
+    saveStories(); renderStories();
+    document.getElementById('s_title').value=''; document.getElementById('s_body').value='';
+  });
+  document.getElementById('clearStories').addEventListener('click', ()=> { if(confirm('Wyczyścić wszystkie lokalne relacje?')){ stories=[]; saveStories(); renderStories(); }});
+  function renderStories(){
+    const el = document.getElementById('storiesList'); el.innerHTML='';
+    if(stories.length===0){ el.innerHTML = '<p class="note">Brak historii — dodaj pierwszą!</p>'; return; }
+    stories.forEach(s=>{
+      const d = document.createElement('div'); d.style.marginBottom='12px';
+      d.innerHTML = `<strong style="color:var(--accent)">${s.title}</strong> <div class="note" style="margin-top:6px">${s.body}</div><div class="note" style="margin-top:6px;font-size:0.85rem">Dodano: ${new Date(s.time).toLocaleString()}</div>`;
+      el.appendChild(d);
+    });
+  }
+
+  // ---------- ADVICE (Mokosh) ----------
+  let advices = [];
+  function loadAdvice(){ const raw = localStorage.getItem('janosix_advice'); advices = raw ? JSON.parse(raw) : []; renderAdvice(); }
+  function saveAdvice(){ localStorage.setItem('janosix_advice', JSON.stringify(advices)); }
+  document.getElementById('submitAdvice').addEventListener('click', ()=>{
+    const name = document.getElementById('p_name').value || 'Anonim';
+    const text = document.getElementById('p_text').value || '';
+    if(!text.trim()){ alert('Wpisz treść porady.'); return; }
+    advices.unshift({id:'A'+Date.now(),name,text,time:new Date().toISOString()});
+    saveAdvice(); renderAdvice();
+    document.getElementById('p_name').value=''; document.getElementById('p_text').value='';
+  });
+  document.getElementById('clearAdvice').addEventListener('click', ()=> { if(confirm('Wyczyścić wszystkie porady?')){ advices=[]; saveAdvice(); renderAdvice(); }});
+  function renderAdvice(){
+    const el = document.getElementById('adviceList'); el.innerHTML='';
+    if(advices.length===0){ el.innerHTML = '<p class="note">Brak porad — dodaj swoją.</p>'; return; }
+    advices.forEach(a=>{
+      const d = document.createElement('div'); d.style.marginBottom='12px';
+      d.innerHTML = `<strong style="color:var(--accent)">${a.name}</strong><div class="note" style="margin-top:6px">${a.text}</div><div class="note" style="margin-top:6px;font-size:0.85rem">Dodano: ${new Date(a.time).toLocaleString()}</div>`;
+      el.appendChild(d);
+    });
+  }
+
+  // ---------- QUANTUM CANVAS ----------
+  const qCanvas = document.getElementById('quantumCanvas');
+  const qCtx = qCanvas.getContext('2d');
+  let qDPR = window.devicePixelRatio || 1;
+  let particles = [], qMouse = {x:-9999,y:-9999};
+  function resizeQuantum(){
+    qDPR = window.devicePixelRatio || 1;
+    qCanvas.width = qCanvas.clientWidth * qDPR;
+    qCanvas.height = qCanvas.clientHeight * qDPR;
+    qCtx.setTransform(qDPR,0,0,qDPR,0,0);
+  }
+  function initQuantum(){
+    particles = [];
+    const w = qCanvas.clientWidth || 800, h = qCanvas.clientHeight || 360;
+    for(let i=0;i<160;i++){ particles.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-0.5)*0.7,vy:(Math.random()-0.5)*0.7,size:Math.random()*2.2+0.8,hue:Math.random()*360}); }
+    resizeQuantum(); requestAnimationFrame(quantumTick);
+  }
+  qCanvas.addEventListener('mousemove', (e)=>{ const r=qCanvas.getBoundingClientRect(); qMouse.x = e.clientX - r.left; qMouse.y = e.clientY - r.top; });
+  qCanvas.addEventListener('mouseleave', ()=>{ qMouse.x=-9999; qMouse.y=-9999; });
+  function quantumTick(){
+    const w = qCanvas.clientWidth, h = qCanvas.clientHeight;
+    qCtx.clearRect(0,0,w,h);
+    const g = qCtx.createLinearGradient(0,0,w,h); g.addColorStop(0,'rgba(0,20,40,0.55)'); g.addColorStop(1,'rgba(2,6,12,0.75)');
+    qCtx.fillStyle = g; qCtx.fillRect(0,0,w,h);
+    for(const p of particles){
+      if(qMouse.x>-9000){
+        const dx = (qMouse.x - p.x), dy = (qMouse.y - p.y);
+        const d = Math.max(20, Math.hypot(dx,dy));
+        p.vx += (dx/d)*0.12/d; p.vy += (dy/d)*0.12/d;
+      } else { p.vx += (Math.random()-0.5)*0.02; p.vy += (Math.random()-0.5)*0.02; }
+      p.x += p.vx + Math.sin((p.x+p.y+Date.now()/5000))*0.15;
+      p.y += p.vy + Math.cos((p.x-p.y+Date.now()/3000))*0.12;
+      if(p.x<0) p.x = w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0;
+      qCtx.beginPath(); qCtx.fillStyle = `hsla(${p.hue},80%,60%,0.07)`; qCtx.arc(p.x,p.y,p.size*8,0,Math.PI*2); qCtx.fill();
+      qCtx.beginPath(); qCtx.fillStyle = `hsla(${p.hue},85%,65%,0.95)`; qCtx.arc(p.x,p.y,p.size,0,Math.PI*2); qCtx.fill();
+    }
+    requestAnimationFrame(quantumTick);
+  }
+
+  // ---------- STAR BACKGROUND (decorative) ----------
+  function createStarField(){
+    // create a light-weight starfield by injecting tiny divs
+    const starRoot = document.createElement('div');
+    starRoot.id = 'janosix-starfield';
+    starRoot.style.position = 'fixed';
+    starRoot.style.left = '0'; starRoot.style.top = '0';
+    starRoot.style.width = '100%'; starRoot.style.height = '100%';
+    starRoot.style.zIndex = '-3';
+    document.body.appendChild(starRoot);
+    for(let i=0;i<220;i++){
+      const s = document.createElement('div');
+      s.style.position='absolute'; s.style.width = (Math.random()*2+0.5)+'px'; s.style.height = s.style.width;
+      s.style.background = '#bfefff'; s.style.borderRadius='50%';
+      s.style.left = Math.random()*100+'%'; s.style.top = Math.random()*100+'%';
+      s.style.opacity = (0.25+Math.random()*0.9).toString();
+      s.style.filter = 'blur(' + (Math.random()*0.6)+'px)';
+      starRoot.appendChild(s);
+    }
+  }
+
+  // ---------- INIT ALL ON LOAD ----------
+  function initAll(){
+    // gallery rendered
+    // map
+    DPR = window.devicePixelRatio || 1;
+    setMapSize(); genStars(); loadReports(); drawMap();
+    // stories/advice
+    loadStories(); loadAdvice();
+    // quantum
+    resizeQuantum(); initQuantum();
+    // create starfield
+    createStarField();
+    // start matrix only if toggled by user
+    // for mobile/responsive
+    window.addEventListener('resize', ()=>{ DPR = window.devicePixelRatio || 1; setMapSize(); resizeQuantum(); drawMap(); });
+  }
+  window.addEventListener('load', initAll);
+
+  // ---------- small polyfills / helpers ----------
+  Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
+    get: function(){ return !!(this.currentTime > 0 && !this.paused && !this.ended && this.readyState > 2); }
+  });
+
+  // ---------- load persistent data ----------
+  loadStories(); loadAdvice(); loadReports();
+
+  </script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JANOSIX & Mokosh - Portal Świadomości</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+  background: radial-gradient(circle at 20% 20%, #0b0b1a, #000);
+  overflow-x: hidden;
+}
+
+header {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid #333;
+}
+
+h1 {
+  font-size: 3em;
+  background: linear-gradient(90deg, #00f0ff, #ff00e6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+section {
+  padding: 60px 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+h2 {
+  font-size: 2em;
+  color: #00ffff;
+  text-shadow: 0 0 15px #00ffff;
+}
+
+p {
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.gallery img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,255,255,0.4);
+  transition: 0.3s;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(0,255,255,0.8);
+}
+
+/* Parallax tło gwiazd */
+.stars {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: url('https://cdn.pixabay.com/photo/2013/07/18/20/26/space-164180_1280.jpg');
+  z-index: -1;
+  background-size: cover;
+  animation: moveStars 200s linear infinite;
+}
+
+@keyframes moveStars {
+  from {background-position: 0 0;}
+  to {background-position: 10000px 5000px;}
+}
+
+/* Muzyka */
+#audio-control {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #0ff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+/* Efekt Matrix */
+.matrix {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  color: rgba(0,255,0,0.3);
+  font-family: monospace;
+  overflow: hidden;
+  z-index: -2;
+  pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+<div class="stars"></div>
+<canvas id="matrixCanvas" class="matrix"></canvas>
+
+<header>
+  <h1>JANOSIX & Mokosh</h1>
+  <p>Portal Świadomości — Odkryj Niewidzialne</p>
+</header>
+
+<!-- Muzyka -->
+<audio id="bg-music" autoplay loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3c25b95b72.mp3?filename=space-ambient-110299.mp3" type="audio/mp3">
+</audio>
+<button id="audio-control" onclick="toggleMusic()">⏸ Muzyka</button>
+
+<section>
+  <h2>🌙 Porady Pani Mokosh</h2>
+  <p>Pani Mokosh to strażniczka losu i cykli natury. Jej porady dotyczą harmonii z żywiołami, oczyszczenia duszy i odkrywania energii ukrytych w codzienności. Uczy jak wsłuchać się w szept wszechświata — przez sny, symbole i intuicję.</p>
+  <div class="gallery">
+    <img src="https://cdn.pixabay.com/photo/2017/02/13/17/42/woman-2062666_1280.jpg" alt="Mokosh">
+    <img src="https://cdn.pixabay.com/photo/2021/01/05/18/31/forest-5892546_1280.jpg" alt="Nature energy">
+  </div>
+</section>
+
+<section>
+  <h2>✨ Kalejdoskop Światów</h2>
+  <p>Istnieją światy równoległe — odbicia nas samych w nieskończonych wariantach rzeczywistości. Każdy wybór, myśl i emocja tworzy nowy świat, a Ty jesteś jego centrum. W tym dziale badamy przypadki ludzi, którzy widzieli „przesunięcia rzeczywistości”.</p>
+  <div class="gallery">
+    <img src="https://cdn.pixabay.com/photo/2019/09/11/13/35/multiverse-4467438_1280.jpg">
+    <img src="https://cdn.pixabay.com/photo/2020/11/16/19/57/universe-5749982_1280.jpg">
+  </div>
+</section>
+
+<section>
+  <h2>🪐 Równoleżnik</h2>
+  <p>Linia łącząca światy — między snem a jawą. Tu znajdziesz badania o czasie, paradoksach podróży i rezonansach międzywymiarowych. Czy świadomość może przesunąć materię?</p>
+  <div class="gallery">
+    <img src="https://cdn.pixabay.com/photo/2022/03/07/06/48/quantum-7052972_1280.jpg">
+    <img src="https://cdn.pixabay.com/photo/2021/02/19/09/50/wormhole-6030049_1280.jpg">
+  </div>
+</section>
+
+<section>
+  <h2>🌌 Echa Przestrzeni</h2>
+  <p>Naukowcy rejestrują sygnały, które nie mają źródła. Być może to echa dawnych cywilizacji lub świadomości, które nie umarły, tylko przeniosły się w inny wymiar. Wysłuchaj nagrań i relacji — być może coś w Tobie też zadrży.</p>
+  <div class="gallery">
+    <img src="https://cdn.pixabay.com/photo/2018/01/03/21/17/space-3053470_1280.jpg">
+    <img src="https://cdn.pixabay.com/photo/2020/06/06/19/44/galaxy-5269400_1280.jpg">
+  </div>
+</section>
+
+<section>
+  <h2>🧠 Paradoks Rzeczywistości & Błąd Systemu</h2>
+  <p>Co jeśli świat to tylko kod? Zjawisko déjà vu, synchroniczność i „glitche” rzeczywistości mogą być próbą wszechświata, by się zresetować. Ten dział bada anomalie, które wskazują, że symulacja może się psuć.</p>
+  <div class="gallery">
+    <img src="https://cdn.pixabay.com/photo/2017/06/30/20/20/artificial-intelligence-2457842_1280.jpg">
+    <img src="https://cdn.pixabay.com/photo/2018/04/18/18/56/quantum-3330969_1280.jpg">
+  </div>
+</section>
+
+<footer style="text-align:center; padding:30px; background:rgba(0,0,0,0.6); border-top:1px solid #333;">
+  <p>© 2025 JANOSIX & Mokosh — Wszelkie prawa zastrzeżone</p>
+</footer>
+
+<script>
+function toggleMusic() {
+  const music = document.getElementById("bg-music");
+  const btn = document.getElementById("audio-control");
+  if (music.paused) {
+    music.play();
+    btn.innerText = "⏸ Muzyka";
+  } else {
+    music.pause();
+    btn.innerText = "▶️ Włącz Muzykę";
+  }
+}
+
+// Matrix efekt
+const canvas = document.getElementById('matrixCanvas');
+const ctx = canvas.getContext('2d');
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+const chars = "01";
+const drops = Array(Math.floor(canvas.width / 10)).fill(1);
+function draw() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#0F0";
+  ctx.font = "15px monospace";
+  for (let i = 0; i < drops.length; i++) {
+    const text = chars[Math.floor(Math.random() * chars.length)];
+    ctx.fillText(text, i * 10, drops[i] * 20);
+    if (drops[i] * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  }
+}
+setInterval(draw, 35);
+</script>
+
+</body>
+</html>
