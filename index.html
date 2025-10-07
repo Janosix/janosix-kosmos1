@@ -389,7 +389,7 @@ footer{margin-top:18px;padding:18px;text-align:center;color:var(--muted);font-si
   let audioStarted = false;
   function startAudioIfAllowed(){
     if(audioStarted) return;
-    bgAudio.volume = 0.12;
+    bgAudio.volume = 1.0;
     bgAudio.play().catch(()=>{ /* autoplay blocked until user interacts */});
     audioStarted = true;
     musicToggle.textContent = 'Wyłącz muzykę';
@@ -886,6 +886,7 @@ setInterval(draw, 35);
 
 </body>
 </html>
+
 
 
 
